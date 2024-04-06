@@ -32,32 +32,32 @@ int calc(int b, int exp, int mod) {
 }
 int main() {                                                                                                              
     int p = 13;
-	int primitive_root = 61;
+	int q = 61;
     // Первый участник (Alice)
     int private_key_alice = 2;
-    int public_key_alice = calc(primitive_root, private_key_alice, p);
+    int public_key_alice = calc(q, private_key_alice, p);
     cout<<"публичный Ключ Алисы "<< public_key_alice<<endl;
 
     // Второй участник (Bob)
     int private_key_bob = 10;
-    int public_key_bob = calc(primitive_root, private_key_bob, p);
+    int public_key_bob = calc(q, private_key_bob, p);
     cout<<"публичный Ключ Боба "<<public_key_bob<<endl;
 
     // Обмен и вычисление общего секретного ключа
-    int shared_secret_bob = calc(public_key_alice, private_key_bob, p);
+    int secret_bob = calc(public_key_alice, private_key_bob, p);
 
     // Боб пишет сообщение
     string plaintext = "Hi, Alice!";
     // Боб использует в качестве сдвига свой секретный ключ
-    int shift = shared_secret_bob;
+    int shift = secret_bob;
     // Сообщение шифруется
     string ciphertext = caesar_cipher(plaintext, shift);
     // Сообщение отправляется
     cout << "Зашифрованный текст: " << ciphertext << endl;
     // Алиса вычисляет сдвиг
-    int shared_secret_alice = calc(public_key_bob, private_key_alice, p);
+    int secret_alice = calc(public_key_bob, private_key_alice, p);
 
-    string decrypted_text = caesar_cipher(ciphertext, 26 - shift); // Расшифровка
+    string decrypted_text = caesar_cipher(ciphertext, 26 - secret_alice); // Расшифровка
     cout << "Расшифрованный текст: " << decrypted_text << endl;
     return 0;
 }
